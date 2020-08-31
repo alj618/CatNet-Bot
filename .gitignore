@@ -2,6 +2,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,vim,emacs,pycharm+all,nim,rust,visualstudiocode,sublimetext
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,vim,emacs,pycharm+all,nim,rust,visualstudiocode,sublimetext
 
+config.toml
+
 ### Emacs ###
 # -*- mode: gitignore; -*-
 *~
