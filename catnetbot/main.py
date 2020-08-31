@@ -9,7 +9,7 @@ import asyncio
 config = json.load(open("config.json"))
 
 
-bot = commands.Bot(command_prefix=f'{config["prefix"]}')
+bot = commands.Bot(command_prefix=f'{config["prefix"]}', case_insensitive = True)
 
 
 @bot.event
