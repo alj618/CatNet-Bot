@@ -20,4 +20,4 @@ async def on_ready():
 	print(f"Бот вошёл в сеть. Аккаунт: {bot.user}, ID аккаунта: {bot.user.id}")
 
 
-bot.run(f'{config["token"]}') # запуск бота, надо вставить токен бота который можно получить зайдя в https://discord.com/developers/applications в приложение вашего бота
+bot.run(f'{config["token"]}')
