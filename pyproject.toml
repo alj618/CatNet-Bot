@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "catnet-bot"
+version = "0.1.0"
+description = ""
+authors = ["CatNet"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+"discord.py" = "^1.4.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
