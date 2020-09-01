@@ -1,16 +1,23 @@
+"""Ког с ошибками"""
 import discord
 from discord.ext import commands
+import toml_config  # я не помню откуда питон ищет модули, вроде из места запуска
 
-SUCCESS_LINE = "<:normal_line:749986920578416734>" * 14 + "\n⠀"
-SUCCESS_COLOR = 0x6EE51F
+# На этом моменте может что ни будь сломаться т.к. не проверял, но должно работать
 
-STANDART_LINE = "<:standart_line:749988256350863461>" * 14 + "\n⠀"
-STANDART_COLOR = 0xADADAD
+conf = toml_config.load_config()["messages"]["errors"]
 
-ERROR_LINE = "<:error_line:749986920700051518>" * 14 + "\n⠀"
-ERROR_COLOR = 0xFF3D43
 
-INVISIBLE_SYMBOL = "⠀"
+SUCCESS_LINE = conf["success_line"]["emoji"] * conf["success_line"]["repeat"] + "\n⠀"
+SUCCESS_COLOR = conf["success_color"]["color"]
+
+STANDART_LINE = conf["standard_line"]["emoji"] * conf["standard_line"]["repeat"] + "\n⠀"
+STANDART_COLOR = conf["standard_line"]["color"]
+
+ERROR_LINE = conf["error_line"]["emoji"] * conf["error_line"]["repeat"] + "\n⠀"
+ERROR_COLOR = conf["error_color"]["color"]
+
+INVISIBLE_SYMBOL = conf["invisible_symbol"]
 
 
 class Errors(commands.Cog):
