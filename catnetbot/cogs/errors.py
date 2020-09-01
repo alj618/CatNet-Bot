@@ -1,24 +1,30 @@
+"""Ког с ошибками"""
 import discord
 from discord.ext import commands
+import toml_config  # я не помню откуда питон ищет модули, вроде из места запуска
 
-SUCCESS_LINE = "<:normal_line:749986920578416734>" * 14 + "\n⠀"
-SUCCESS_COLOR = 0x6EE51F
+# На этом моменте может что ни будь сломаться т.к. не проверял, но должно работать
 
-STANDART_LINE = "<:standart_line:749988256350863461>" * 14 + "\n⠀"
-STANDART_COLOR = 0xadadad
+conf = toml_config.load_config()["messages"]["errors"]
 
-ERROR_LINE = "<:error_line:749986920700051518>" * 14 + "\n⠀"
-ERROR_COLOR = 0xff3d43
 
-INVISIBLE_SYMBOL = "⠀"
+SUCCESS_LINE = conf["success_line"]["emoji"] * conf["success_line"]["repeat"] + "\n⠀"
+SUCCESS_COLOR = conf["success_color"]["color"]
+
+STANDART_LINE = conf["standard_line"]["emoji"] * conf["standard_line"]["repeat"] + "\n⠀"
+STANDART_COLOR = conf["standard_line"]["color"]
+
+ERROR_LINE = conf["error_line"]["emoji"] * conf["error_line"]["repeat"] + "\n⠀"
+ERROR_COLOR = conf["error_color"]["color"]
+
+INVISIBLE_SYMBOL = conf["invisible_symbol"]
+
 
 class Errors(commands.Cog):
-
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
-
     async def on_command_error(self, ctx, error):
         try:
             await ctx.message.delete()
@@ -26,24 +32,40 @@ class Errors(commands.Cog):
             pass
         finally:
             pass
+
         async def own_command_error_message(problem, solution):
             embed = discord.Embed(color=ERROR_COLOR)
             embed.add_field(name="Проблема:", value=f"{problem}")
-            embed.add_field(name=f"{INVISIBLE_SYMBOL}", value=f"{ERROR_LINE}", inline=False)
+            embed.add_field(
+                name=f"{INVISIBLE_SYMBOL}", value=f"{ERROR_LINE}", inline=False
+            )
             embed.add_field(name="Решение:", value=f"{solution}")
             await ctx.send(embed=embed)
+
         if isinstance(error, commands.CommandNotFound):
-            await own_command_error_message("Команда не найдена!", "Используйте существующую команду,\nкоторая есть в списке `.help`")
+            await own_command_error_message(
+                "Команда не найдена!",
+                "Используйте существующую команду,\nкоторая есть в списке `.help`",
+            )
         elif isinstance(error, commands.DisabledCommand):
-            await own_command_error_message("Команда отключена!", "Используйте другую, активированную\n в данный момент команду")
+            await own_command_error_message(
+                "Команда отключена!",
+                "Используйте другую, активированную\n в данный момент команду",
+            )
         elif isinstance(error, commands.CommandOnCooldown):
 
             def make_readable(seconds):
                 hours, seconds = divmod(seconds, 60 ** 2)
                 minutes, seconds = divmod(seconds, 60)
-                return '{:02}ч : {:02}м : {:02}с'.format(round(hours), round(minutes), round(seconds))
+                return "{:02}ч : {:02}м : {:02}с".format(
+                    round(hours), round(minutes), round(seconds)
+                )
 
-            await own_command_error_message("Команда с задержкой!", f"Используйте данную команду \nпосле `{make_readable(error.retry_after)}` ⏳")
+            await own_command_error_message(
+                "Команда с задержкой!",
+                f"Используйте данную команду \nпосле `{make_readable(error.retry_after)}` ⏳",
+            )
+
 
 def setup(bot):
     bot.add_cog(Errors(bot))
