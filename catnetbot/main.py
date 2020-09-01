@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from loguru import logger
-import json
 import asyncio
 import toml_config
 
