@@ -1,4 +1,4 @@
-"""Ког с ошибками"""
+    """Ког с ошибками"""
 import discord
 from discord.ext import commands
 import toml_config  # я не помню откуда питон ищет модули, вроде из места запуска
@@ -26,12 +26,8 @@ class Errors(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        try:
+        if ctx.message:
             await ctx.message.delete()
-        except:
-            pass
-        finally:
-            pass
 
         async def own_command_error_message(problem, solution):
             embed = discord.Embed(color=ERROR_COLOR)
