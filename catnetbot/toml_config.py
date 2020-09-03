@@ -42,12 +42,12 @@ def load_config():
     [test]
     abc = 123
 
-    >>> import toml_config
-    >>> conf = toml_config.load_config()
-    >>> conf["test"]["abc"]
+    # >>> import toml_config
+    # >>> conf = toml_config.load_config()
+    # >>> conf["test"]["abc"]
     123
     """
-    f = config_find()  # тут можно было бы использовать with, но мне лень
-    conf = tomlkit.parse(f.read())
-    f.close()
-    return conf
+
+    with open(CONFIG_PATH, encoding = "utf-8") as f:
+        conf = tomlkit.parse(f.read())
+        return conf
