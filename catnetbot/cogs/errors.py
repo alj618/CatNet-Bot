@@ -7,6 +7,8 @@ import toml_config  # я не помню откуда питон ищет мод
 
 conf = toml_config.load_config()["messages"]["errors"]
 
+permissions_config = toml_config.load_config()["discord"]
+
 PREFIX = toml_config.load_config()["bot"]["prefix"]
 
 SUCCESS_LINE = conf["success_line"]["emoji"] * conf["success_line"]["repeat"] + "\n "
@@ -36,6 +38,8 @@ class Errors(commands.Cog):
             )
             embed.add_field(name="Решение:", value=f"{solution}")
             await ctx.send(embed=embed)
+            if ctx.message:
+                await ctx.message.delete()
 
         if isinstance(error, commands.CommandNotFound):
             await own_command_error_message(
@@ -61,10 +65,9 @@ class Errors(commands.Cog):
                 f"Используйте данную команду \nпосле `{make_readable(error.retry_after)}` ⏳",
             )
         elif isinstance(error, commands.MissingPermissions):
-
             await own_command_error_message(
                     "У Вас недостаточно прав!",
-                    "Получите следующие права:\n" + "\n".join(error.missing_perms)
+                    "Получите следующие права:\n" + "\n".join([permissions_config[f"{perm}"] for perm in error.missing_perms])
             )
 
         elif isinstance(error, commands.MissingRequiredArgument):
