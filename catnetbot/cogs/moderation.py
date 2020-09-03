@@ -36,5 +36,22 @@ class Moderation(commands.Cog):
         await ctx.send(embed = emb)
         await member.kick()
 
+    @commands.command(
+            name = "бан",
+            aliases = ["ban", "блокировать", "забанить"],
+            description = "Забанить игрока на сервере",
+            usage = "бан [участник] (причина)",
+    )
+    @commands.has_permissions(ban_members = True)
+    async def moderation_command_ban(self, ctx, member: discord.Member, reason = "Не указана"):
+        emb = discord.Embed(color = SUCCESS_COLOR)
+        emb.add_field(name = "Забанен:", value = f"{member}")
+        emb.add_field(name = "Забанил:", value = f"{ctx.author.mention}")
+        emb.add_field(name = f"{INVISIBLE_SYMBOL}", value = f"{SUCCESS_LINE}", inline = False)
+        emb.add_field(name = "Причина:", value = f"{reason}")
+        await ctx.send(embed = emb)
+        await member.ban(reason = reason + f" ({ctx.author.name})")
+
+
 def setup(bot):
     bot.add_cog(Moderation(bot))
